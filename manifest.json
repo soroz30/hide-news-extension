@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "React Content Script",
+  "name": "Remove bad news",
   "version": "1.0.0",
   "action": {
-    "default_title": "Popup",
+    "default_title": "Remove bad news",
     "default_popup": "index.html",
     "default_icon": "logo192.png"
   },
