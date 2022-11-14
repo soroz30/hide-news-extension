@@ -32,17 +32,17 @@ const getLinksByWordsArray = (words: string[]) => {
 
 const hideLinks = (links: HTMLAnchorElement[]) => {
   links.forEach((link) => {
-    link.style.visibility = "hidden";
+    link.style.opacity = "0";
   });
 };
 
-function showLinks(links: HTMLAnchorElement[]) {
+const showLinks = (links: HTMLAnchorElement[]) => {
   links.forEach((link) => {
-    link.style.visibility = "visible";
+    link.style.opacity = "1";
   });
-}
+};
 
-function handleRequest(request: any) {
+const handleRequest = (request: any) => {
   const { type, data } = request;
 
   switch (type) {
@@ -80,7 +80,7 @@ function handleRequest(request: any) {
     default:
       break;
   }
-}
+};
 
 chrome.runtime.onMessage.addListener(function (request) {
   handleRequest(request);

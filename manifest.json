@@ -1,13 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Remove bad news",
+  "name": "Fear Less",
   "version": "1.0.0",
   "action": {
-    "default_title": "Remove bad news",
+    "default_title": "Fear Less",
     "default_popup": "index.html",
     "default_icon": "logo192.png"
   },
   "icons": {},
+  "permissions": ["storage"],
   "content_scripts": [
     {
       "matches": ["https://*/*"],

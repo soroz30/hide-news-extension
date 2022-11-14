@@ -3,34 +3,44 @@
 
 import { ADD, REMOVE, ENABLE, DISABLE, WORDS } from "../content-script/main";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 const App = () => {
-  const [words, setWords] = useState(["wojn", "ukra", "covid"]);
-  const [active, setActive] = useState(true);
-  const [input, setInput] = useState("");
+  const [words, setWords] = useState<string[]>([]);
+  const [active, setActive] = useState<boolean>(false);
+  const [input, setInput] = useState<string>("");
 
-  const hideUnwanted = () => {
+  useEffect(() => {
+    chrome.storage.sync.get({ words, active }, (items) => {
+      const { words, active } = items;
+      setWords(words);
+      setActive(active);
+    });
+  }, []);
+
+  const activateHiding = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const id = tabs[0].id;
 
       if (id) {
-        chrome.tabs.sendMessage(id, { type: ENABLE, data: { wordsToHide: words } }, function () {
-          setActive(true);
-        });
+        chrome.tabs.sendMessage(id, { type: ENABLE, data: { wordsToHide: words } });
+        setActive(true);
+        chrome.storage.sync.set({ active: true });
       }
     });
   };
 
-  const showUnwanted = () => {
+  const disableHiding = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const id = tabs[0].id;
 
       if (id) {
         chrome.tabs.sendMessage(id, { type: DISABLE, data: { wordsToShow: words } }, function () {
-          setActive(false);
+          // setActive(false);
         });
+        setActive(false);
+        chrome.storage.sync.set({ active: false });
       }
     });
   };
@@ -38,7 +48,9 @@ const App = () => {
   const addWord = () => {
     const newWord = input;
     setInput("");
-    setWords([...words, newWord]);
+    const updatedWords = [...words, newWord];
+    setWords(updatedWords);
+    chrome.storage.sync.set({ words: updatedWords });
     if (!words.includes(newWord) && newWord) {
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         const id = tabs[0].id;
@@ -51,8 +63,9 @@ const App = () => {
   };
 
   const removeWord = (word: string) => {
-    const currentWords = words.filter((w) => w !== word);
-    setWords(currentWords);
+    const updatedWords = words.filter((w) => w !== word);
+    setWords(updatedWords);
+    chrome.storage.sync.set({ words: updatedWords });
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const id = tabs[0].id;
 
@@ -69,13 +82,18 @@ const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <p>Hide unwanted news</p>
+        <img className="fearlessLogo" src="/logo.png" alt="Fear Less Logo" />
+        <div className="hidingButton" onClick={() => (active ? disableHiding() : activateHiding())}>
+          <input type="checkbox" checked={active} />
+          <label className="hidingButtonLabel">Hiding Active</label>
+        </div>
       </header>
-      <div>
-        <ul id="wordsList">
+      <div className="hiddenWords">
+        <p>Your muted words:</p>
+        <ul className="wordsList">
           {words.map((word) => {
             return (
-              <li key={word}>
+              <li className="wordItem" key={word}>
                 {word}{" "}
                 <span onClick={() => removeWord(word)} style={{ cursor: "pointer" }}>
                   X
@@ -85,20 +103,10 @@ const App = () => {
           })}
         </ul>
       </div>
-      <div>
-        <input id="addWordInput" value={input} onChange={handleInputChange} />
-        <button id="buttonAdd" onClick={addWord}>
+      <div className="addWord">
+        <input className="addWordInput" value={input} onChange={handleInputChange} />
+        <button className="buttonAdd" onClick={addWord}>
           Add Word
-        </button>
-      </div>
-      <div>
-        <button id="buttonShow" onClick={showUnwanted}>
-          Show Links
-        </button>
-      </div>
-      <div>
-        <button id="buttonHide" onClick={hideUnwanted}>
-          Hide Links
         </button>
       </div>
     </div>
