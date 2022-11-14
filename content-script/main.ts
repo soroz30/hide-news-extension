@@ -4,8 +4,6 @@ export const ENABLE = "enable";
 export const DISABLE = "disable";
 export const WORDS = "words";
 
-let active: boolean | null;
-
 const getAllLinks = () => {
   return Array.from(document.querySelectorAll("a"));
 };
@@ -47,19 +45,19 @@ const handleRequest = (request: any) => {
 
   switch (type) {
     case ADD: {
-      const { newWord } = data;
+      const { newWord, active } = data;
       const newLinks = getLinksByWord(newWord);
 
       if (active) {
-        showLinks(newLinks);
+        hideLinks(newLinks);
       }
       break;
     }
     case REMOVE: {
-      const { removeWord } = data;
+      const { removeWord, active } = data;
       if (active) {
         const links = getLinksByWord(removeWord);
-        hideLinks(links);
+        showLinks(links);
       }
       break;
     }
@@ -67,14 +65,12 @@ const handleRequest = (request: any) => {
       const { wordsToHide } = data;
       const linksToHide = getLinksByWordsArray(wordsToHide);
       hideLinks(linksToHide);
-      active = true;
       break;
     }
     case DISABLE: {
       const { wordsToShow } = data;
       const linksToShow = getLinksByWordsArray(wordsToShow);
       showLinks(linksToShow);
-      active = false;
       break;
     }
     default:

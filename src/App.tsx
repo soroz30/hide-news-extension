@@ -56,7 +56,7 @@ const App = () => {
         const id = tabs[0].id;
 
         if (id) {
-          chrome.tabs.sendMessage(id, { type: ADD, data: { newWord } });
+          chrome.tabs.sendMessage(id, { type: ADD, data: { newWord, active } });
         }
       });
     }
@@ -70,7 +70,7 @@ const App = () => {
       const id = tabs[0].id;
 
       if (id) {
-        chrome.tabs.sendMessage(id, { type: REMOVE, data: { removeWord: word } });
+        chrome.tabs.sendMessage(id, { type: REMOVE, data: { removeWord: word, active } });
       }
     });
   };
