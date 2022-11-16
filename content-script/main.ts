@@ -2,6 +2,7 @@ export const ADD = "add";
 export const REMOVE = "remove";
 export const ENABLE = "enable";
 export const DISABLE = "disable";
+export const ACTIVE = "active";
 export const WORDS = "words";
 
 const getAllLinks = () => {
@@ -10,6 +11,7 @@ const getAllLinks = () => {
 
 const getLinksByWord = (word: string) => {
   const allLinks = getAllLinks();
+
   return allLinks.filter((el) => {
     const textContent = el.textContent;
     if (textContent) {
@@ -20,6 +22,7 @@ const getLinksByWord = (word: string) => {
 
 const getLinksByWordsArray = (words: string[]) => {
   const allLinks = getAllLinks();
+
   return allLinks.filter((el) => {
     const textContent = el.textContent?.toLowerCase();
     if (textContent) {
@@ -45,31 +48,30 @@ const handleRequest = (request: any) => {
 
   switch (type) {
     case ADD: {
-      const { newWord, active } = data;
+      const { newWord } = data;
       const newLinks = getLinksByWord(newWord);
 
-      if (active) {
-        hideLinks(newLinks);
-      }
+      hideLinks(newLinks);
       break;
     }
     case REMOVE: {
-      const { removeWord, active } = data;
-      if (active) {
-        const links = getLinksByWord(removeWord);
-        showLinks(links);
-      }
+      const { removeWord } = data;
+      const links = getLinksByWord(removeWord);
+
+      showLinks(links);
       break;
     }
     case ENABLE: {
       const { wordsToHide } = data;
       const linksToHide = getLinksByWordsArray(wordsToHide);
+
       hideLinks(linksToHide);
       break;
     }
     case DISABLE: {
       const { wordsToShow } = data;
       const linksToShow = getLinksByWordsArray(wordsToShow);
+
       showLinks(linksToShow);
       break;
     }
@@ -78,7 +80,20 @@ const handleRequest = (request: any) => {
   }
 };
 
+const handleTabOpening = () => {
+  chrome.storage.sync.get([WORDS, ACTIVE], (items) => {
+    const { words, active } = items;
+
+    if (active) {
+      const linksToHide = getLinksByWordsArray(words);
+      hideLinks(linksToHide);
+    }
+  });
+};
+
 chrome.runtime.onMessage.addListener(function (request) {
   handleRequest(request);
   return true;
 });
+
+handleTabOpening();
