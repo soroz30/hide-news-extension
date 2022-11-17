@@ -99,7 +99,7 @@ const App = () => {
           return (
             <li className="wordItem" key={word}>
               {word}{" "}
-              <span onClick={() => removeWord(word)} style={{ cursor: "pointer" }}>
+              <span className="wordRemove" onClick={() => removeWord(word)} style={{ cursor: "pointer" }}>
                 X
               </span>
             </li>
@@ -107,9 +107,9 @@ const App = () => {
         })}
       </WordsList>
       <AddWord>
-        <input className="addWordInput" value={input} onChange={handleInputChange} />
+        <input className="addWordInput" value={input} onChange={handleInputChange} placeholder={"Add a new word"} />
         <button className="buttonAdd" onClick={addWord}>
-          Add Word
+          Add
         </button>
       </AddWord>
     </div>
