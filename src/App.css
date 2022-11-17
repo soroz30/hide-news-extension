@@ -3,7 +3,7 @@
 }
 
 .App {
-  width: 367px;
+  width: 320px;
   border: 1px solid #e7e7e7;
   border-radius: 5px;
 }
@@ -35,8 +35,8 @@
   border-radius: 5px;
   display: flex;
   align-items: center;
-  max-width: 70px;
-  min-width: 70px;
+  max-width: 80px;
+  min-width: 80px;
 }
 
 .App-link {
@@ -49,14 +49,15 @@
 
 .hidingButtonLabel {
   color: #474747;
-  font-size: 6px;
+  font-size: 8px;
+  font-weight: bold;
   margin: 0 0 0 1px;
 }
 
 .hiddenWords {
   background-color: #dee7f2;
-  min-height: 70px;
-  max-height: 70px;
+  min-height: 170px;
+  max-height: 170px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -66,7 +67,7 @@
 }
 
 .mutedWords {
-  font-size: 7px;
+  font-size: 12px;
   margin: 0 0 8px;
 }
 
@@ -87,7 +88,7 @@
   min-height: 18px;
   max-height: 18px;
   background-color: #e9f4ff;
-  font-size: 7px;
+  font-size: 12px;
   padding: 0 6px;
   display: flex;
   align-items: center;
@@ -132,7 +133,7 @@
   min-height: 22px;
   max-height: 22px;
   border-radius: 4px;
-  font-size: 8px;
+  font-size: 10px;
   background-color: #0195ff;
   color: white;
 }
