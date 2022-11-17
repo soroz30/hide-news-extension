@@ -3,11 +3,12 @@
 
 import { ADD, REMOVE, ENABLE, DISABLE, WORDS, ACTIVE } from "../content-script/main";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "preact/hooks";
 import Header from "./components/Header";
 import WordsList from "./components/WordsList";
 import AddWord from "./components/AddWord";
 import "./App.css";
+const storage = chrome.storage.sync;
 
 const sendToTabs = (message: any) => {
   chrome.tabs.query({}, function (tabs) {
@@ -30,7 +31,7 @@ const App = () => {
   const [input, setInput] = useState<string>("");
 
   useEffect(() => {
-    chrome.storage.sync.get([WORDS, ACTIVE], (items) => {
+    storage.get([WORDS, ACTIVE], (items) => {
       const { words, active } = items;
 
       if (words) {
@@ -41,13 +42,13 @@ const App = () => {
   }, []);
 
   const activateHiding = () => {
-    chrome.storage.sync.set({ active: true });
+    storage.set({ active: true });
     setActive(true);
     sendToTabs({ type: ENABLE, data: { wordsToHide: words } });
   };
 
   const disableHiding = () => {
-    chrome.storage.sync.set({ active: false });
+    storage.set({ active: false });
     setActive(false);
     sendToTabs({ type: DISABLE, data: { wordsToShow: words } });
   };
@@ -62,7 +63,7 @@ const App = () => {
 
     const updatedWords = [...words, newWord];
     setWords(updatedWords);
-    chrome.storage.sync.set({ words: updatedWords });
+    storage.set({ words: updatedWords });
 
     if (active) {
       sendToTabs({ type: ADD, data: { newWord } });
@@ -72,7 +73,7 @@ const App = () => {
   const removeWord = (word: string) => {
     const updatedWords = words.filter((w) => w !== word);
     setWords(updatedWords);
-    chrome.storage.sync.set({ words: updatedWords });
+    storage.set({ words: updatedWords });
 
     if (active) {
       sendToTabs({ type: REMOVE, data: { removeWord: word } });

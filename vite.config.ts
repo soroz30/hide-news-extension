@@ -1,13 +1,13 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import svgr from 'vite-plugin-svgr'
-import { crx } from '@crxjs/vite-plugin'
-import manifest from './manifest.json'
+import { defineConfig } from "vite";
+import preact from "@preact/preset-vite";
+import svgr from "vite-plugin-svgr";
+import { crx } from "@crxjs/vite-plugin";
+import manifest from "./manifest.json";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
+    preact(),
     svgr({
       svgrOptions: {
         icon: true,
@@ -16,5 +16,5 @@ export default defineConfig({
     }),
     // Build Chrome Extension
     crx({ manifest }),
-  ]
-})
+  ],
+});
