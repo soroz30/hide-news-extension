@@ -9,7 +9,6 @@ import WordsList from "./components/WordsList";
 import AddWord from "./components/AddWord";
 import "./App.css";
 
-// Alberta spytać
 const sendToTabs = (message: any) => {
   chrome.tabs.query({}, function (tabs) {
     for (let i = 0; i < tabs.length; ++i) {
@@ -34,7 +33,9 @@ const App = () => {
     chrome.storage.sync.get([WORDS, ACTIVE], (items) => {
       const { words, active } = items;
 
-      setWords(words);
+      if (words) {
+        setWords(words);
+      }
       setActive(active);
     });
   }, []);
@@ -52,7 +53,7 @@ const App = () => {
   };
 
   const addWord = () => {
-    const newWord = input;
+    const newWord = input.toLowerCase();
     setInput("");
 
     if (words.includes(newWord) || !newWord) {
