@@ -4,96 +4,130 @@ export const ENABLE = "enable";
 export const DISABLE = "disable";
 export const ACTIVE = "active";
 export const WORDS = "words";
+import "./links.css";
+const storage = chrome.storage.sync;
 
-const getAllLinks = () => {
-  return Array.from(document.querySelectorAll("a"));
-};
+const nodesTypes = ["span", "div", "li", "th", "td", "dt", "dd", "a"];
 
-const getLinksByWord = (word: string) => {
-  const allLinks = getAllLinks();
-
-  return allLinks.filter((el) => {
-    const textContent = el.textContent;
-    if (textContent) {
-      return textContent.toLowerCase().includes(word);
-    }
-  });
-};
-
-const getLinksByWordsArray = (words: string[]) => {
-  const allLinks = getAllLinks();
-
-  return allLinks.filter((el) => {
-    const textContent = el.textContent?.toLowerCase();
-    if (textContent) {
-      return words.find((word) => textContent.includes(word));
-    }
-  });
-};
-
-const hideLinks = (links: HTMLAnchorElement[]) => {
-  links.forEach((link) => {
-    link.style.opacity = "0";
-  });
-};
-
-const showLinks = (links: HTMLAnchorElement[]) => {
-  links.forEach((link) => {
-    link.style.opacity = "1";
-  });
-};
-
-const handleRequest = (request: any) => {
-  const { type, data } = request;
-
-  switch (type) {
-    case ADD: {
-      const { newWord } = data;
-      const newLinks = getLinksByWord(newWord);
-
-      hideLinks(newLinks);
-      break;
-    }
-    case REMOVE: {
-      const { removeWord } = data;
-      const links = getLinksByWord(removeWord);
-
-      showLinks(links);
-      break;
-    }
-    case ENABLE: {
-      const { wordsToHide } = data;
-      const linksToHide = getLinksByWordsArray(wordsToHide);
-
-      hideLinks(linksToHide);
-      break;
-    }
-    case DISABLE: {
-      const { wordsToShow } = data;
-      const linksToShow = getLinksByWordsArray(wordsToShow);
-
-      showLinks(linksToShow);
-      break;
-    }
-    default:
-      break;
+const clearHiddenLinks = () => {
+  const hiddenLinks = document.querySelectorAll(".fearlessHideLink");
+  for (let i = 0; i < hiddenLinks.length; i++) {
+    hiddenLinks[i].className = hiddenLinks[i].className.replace("fearlessHideLink", "");
   }
 };
 
-const handleTabOpening = () => {
-  chrome.storage.sync.get([WORDS, ACTIVE], (items) => {
-    const { words, active } = items;
+const isWordInText = (text: string, words: string[]) => {
+  return words.some((word: string) => text.includes(word));
+};
 
+const handleNodeLink = (nodeLink: HTMLAnchorElement, words: string[]) => {
+  const textContent = nodeLink.textContent?.toLowerCase();
+
+  if (!textContent) {
+    return (nodeLink.className = nodeLink.className.replace(/fearlessHideLink/g, ""));
+  }
+  const wordInText = isWordInText(textContent, words);
+
+  if (wordInText) {
+    const fearlessHideLink = nodeLink.className.includes("fearlessHideLink");
+    if (!fearlessHideLink) {
+      nodeLink.className += " fearlessHideLink";
+    }
+  } else {
+    nodeLink.className = nodeLink.className.replace(/fearlessHideLink/g, "");
+  }
+};
+
+const refreshHiddenLinks = () => {
+  storage.get([WORDS, ACTIVE], (items) => {
+    const { words, active } = items;
+    const nodes = document.querySelectorAll("a");
     if (active) {
-      const linksToHide = getLinksByWordsArray(words);
-      hideLinks(linksToHide);
+      for (let i = 0; i < nodes.length; i++) {
+        const nodeLink = nodes[i];
+        handleNodeLink(nodeLink, words);
+      }
+    } else {
+      clearHiddenLinks();
     }
   });
 };
 
-chrome.runtime.onMessage.addListener(function (request) {
-  handleRequest(request);
+const observerConfig = {
+  childList: true,
+  subtree: true,
+};
+
+const checkNewNode = (node: HTMLElement, words: string[]) => {
+  const nodeName = node.nodeName.toLowerCase();
+  const nodeTypeToCheck = nodesTypes.includes(nodeName);
+
+  if (!nodeTypeToCheck) {
+    return;
+  }
+
+  const innerText = node.innerText?.toLowerCase();
+
+  if (!innerText) {
+    return;
+  }
+
+  const bannedWordInText = isWordInText(innerText, words);
+
+  if (!bannedWordInText) {
+    return;
+  }
+
+  const notHiddenLink = nodeName === "a" && !node.className.includes("fearlessHideLink");
+
+  if (notHiddenLink) {
+    node.className += " fearlessHideLink";
+  } else {
+    const closestLink = node.closest("a");
+    const notHiddenParentLink = closestLink && !closestLink.className.includes("fearlessHideLink");
+    if (notHiddenParentLink) {
+      closestLink.className += " fearlessHideLink";
+    }
+  }
+};
+
+const observeNodesMutations = (words: string[]) => {
+  const observer = new MutationObserver(function (mutations) {
+    for (let i = 0; i < mutations.length; i++) {
+      const addedNodes = mutations[i].addedNodes;
+
+      for (let y = 0; y < addedNodes.length; y++) {
+        const addedNode = addedNodes[y] as HTMLElement;
+        const childNodes = addedNode.childNodes;
+
+        for (let k = 0; k < childNodes.length; k++) {
+          const childNode = childNodes[k] as HTMLElement;
+          checkNewNode(childNode, words);
+        }
+      }
+    }
+  });
+
+  observer.observe(document, observerConfig);
+};
+
+const handlePageStart = () => {
+  storage.get([WORDS, ACTIVE], (items) => {
+    const { words, active } = items;
+
+    if (active) {
+      observeNodesMutations(words);
+    }
+  });
+};
+
+setTimeout(() => {
+  refreshHiddenLinks();
+}, 500);
+
+chrome.runtime.onMessage.addListener(function () {
+  refreshHiddenLinks();
   return true;
 });
 
-handleTabOpening();
+handlePageStart();

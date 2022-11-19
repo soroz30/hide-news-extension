@@ -1,0 +1,5 @@
+a.fearlessHideLink {
+  position: relative;
+  left: -10000px;
+  pointer-events: none;
+}

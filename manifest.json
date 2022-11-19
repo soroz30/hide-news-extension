@@ -8,11 +8,16 @@
     "default_icon": "logo192.png"
   },
   "icons": {},
-  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"],
+  "permissions": ["storage", "tabs", "scripting", "webNavigation"],
   "content_scripts": [
     {
       "matches": ["https://*/*"],
-      "js": ["content-script/main.ts"]
+      "js": ["content-script/main.ts"],
+      "run_at": "document_start"
     }
-  ]
+  ],
+  "background": {
+    "service_worker": "src/background.ts"
+  }
 }

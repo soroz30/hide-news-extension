@@ -1,7 +1,7 @@
 /// <reference types="chrome" />
 /// <reference types="vite-plugin-svgr/client" />
 
-import { ADD, REMOVE, ENABLE, DISABLE, WORDS, ACTIVE } from "../content-script/main";
+import { WORDS, ACTIVE } from "../content-script/main";
 
 import { useEffect, useState } from "preact/hooks";
 import Header from "./components/Header";
@@ -10,12 +10,12 @@ import AddWord from "./components/AddWord";
 import "./App.css";
 const storage = chrome.storage.sync;
 
-const sendToTabs = (message: any) => {
+const notifyTabs = () => {
   chrome.tabs.query({}, function (tabs) {
     for (let i = 0; i < tabs.length; ++i) {
       const id = tabs[i].id;
       if (id) {
-        chrome.tabs.sendMessage(id, message, () => {
+        chrome.tabs.sendMessage(id, "refresh", () => {
           if (!window.chrome.runtime.lastError) {
             /* empty */
           }
@@ -44,13 +44,13 @@ const App = () => {
   const activateHiding = () => {
     storage.set({ active: true });
     setActive(true);
-    sendToTabs({ type: ENABLE, data: { wordsToHide: words } });
+    notifyTabs();
   };
 
   const disableHiding = () => {
     storage.set({ active: false });
     setActive(false);
-    sendToTabs({ type: DISABLE, data: { wordsToShow: words } });
+    notifyTabs();
   };
 
   const addWord = () => {
@@ -65,9 +65,7 @@ const App = () => {
     setWords(updatedWords);
     storage.set({ words: updatedWords });
 
-    if (active) {
-      sendToTabs({ type: ADD, data: { newWord } });
-    }
+    notifyTabs();
   };
 
   const removeWord = (word: string) => {
@@ -75,9 +73,7 @@ const App = () => {
     setWords(updatedWords);
     storage.set({ words: updatedWords });
 
-    if (active) {
-      sendToTabs({ type: REMOVE, data: { removeWord: word } });
-    }
+    notifyTabs();
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
