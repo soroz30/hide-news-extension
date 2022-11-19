@@ -21,12 +21,12 @@ const isWordInText = (text: string, words: string[]) => {
 };
 
 const handleNodeLink = (nodeLink: HTMLAnchorElement, words: string[]) => {
-  const textContent = nodeLink.textContent?.toLowerCase();
+  const innerText = nodeLink.innerText?.toLowerCase();
 
-  if (!textContent) {
+  if (!innerText) {
     return (nodeLink.className = nodeLink.className.replace(/fearlessHideLink/g, ""));
   }
-  const wordInText = isWordInText(textContent, words);
+  const wordInText = isWordInText(innerText, words);
 
   if (wordInText) {
     const fearlessHideLink = nodeLink.className.includes("fearlessHideLink");
@@ -41,11 +41,14 @@ const handleNodeLink = (nodeLink: HTMLAnchorElement, words: string[]) => {
 const refreshHiddenLinks = () => {
   storage.get([WORDS, ACTIVE], (items) => {
     const { words, active } = items;
+
     const nodes = document.querySelectorAll("a");
     if (active) {
+      const filteredWords = filterSameStartWords(words);
+
       for (let i = 0; i < nodes.length; i++) {
         const nodeLink = nodes[i];
-        handleNodeLink(nodeLink, words);
+        handleNodeLink(nodeLink, filteredWords);
       }
     } else {
       clearHiddenLinks();
@@ -56,6 +59,7 @@ const refreshHiddenLinks = () => {
 const observerConfig = {
   childList: true,
   subtree: true,
+  characterData: true,
 };
 
 const checkNewNode = (node: HTMLElement, words: string[]) => {
@@ -111,12 +115,31 @@ const observeNodesMutations = (words: string[]) => {
   observer.observe(document, observerConfig);
 };
 
+const filterSameStartWords = (words: string[]) => {
+  let redundantWords: string[] = [];
+
+  words.forEach((word) => {
+    const filteredWords = words.filter((w) => w.startsWith(word) && w.length > word.length);
+    if (filteredWords.length) {
+      redundantWords = [...redundantWords, ...filteredWords];
+    }
+  });
+
+  return words.filter((word) => {
+    const redundantWord = redundantWords.includes(word);
+    if (!redundantWord) {
+      return true;
+    }
+  });
+};
+
 const handlePageStart = () => {
   storage.get([WORDS, ACTIVE], (items) => {
     const { words, active } = items;
-
+    const filteredWords = filterSameStartWords(words);
+    console.log(filteredWords);
     if (active) {
-      observeNodesMutations(words);
+      observeNodesMutations(filteredWords);
     }
   });
 };
