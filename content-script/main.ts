@@ -137,7 +137,6 @@ const handlePageStart = () => {
   storage.get([WORDS, ACTIVE], (items) => {
     const { words, active } = items;
     const filteredWords = filterSameStartWords(words);
-    console.log(filteredWords);
     if (active) {
       observeNodesMutations(filteredWords);
     }
