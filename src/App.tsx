@@ -10,17 +10,15 @@ import AddWord from "./components/AddWord";
 import "./App.css";
 const storage = chrome.storage.sync;
 
-const notifyTabs = () => {
-  chrome.tabs.query({}, function (tabs) {
-    for (let i = 0; i < tabs.length; ++i) {
-      const id = tabs[i].id;
-      if (id) {
-        chrome.tabs.sendMessage(id, "refresh", () => {
-          if (!window.chrome.runtime.lastError) {
-            /* empty */
-          }
-        });
-      }
+const notifyActiveTabs = () => {
+  chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+    const id = tabs[0].id;
+    if (id) {
+      chrome.tabs.sendMessage(id, "refresh", () => {
+        if (!window.chrome.runtime.lastError) {
+          /* empty */
+        }
+      });
     }
   });
 };
@@ -44,13 +42,13 @@ const App = () => {
   const activateHiding = () => {
     storage.set({ active: true });
     setActive(true);
-    notifyTabs();
+    notifyActiveTabs();
   };
 
   const disableHiding = () => {
     storage.set({ active: false });
     setActive(false);
-    notifyTabs();
+    notifyActiveTabs();
   };
 
   const addWord = () => {
@@ -65,7 +63,7 @@ const App = () => {
     setWords(updatedWords);
     storage.set({ words: updatedWords });
 
-    notifyTabs();
+    notifyActiveTabs();
   };
 
   const removeWord = (word: string) => {
@@ -73,7 +71,7 @@ const App = () => {
     setWords(updatedWords);
     storage.set({ words: updatedWords });
 
-    notifyTabs();
+    notifyActiveTabs();
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
