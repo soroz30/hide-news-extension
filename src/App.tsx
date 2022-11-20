@@ -15,7 +15,7 @@ const notifyActiveTabs = () => {
     const id = tabs[0].id;
     if (id) {
       chrome.tabs.sendMessage(id, "refresh", () => {
-        if (!window.chrome.runtime.lastError) {
+        if (!chrome.runtime.lastError) {
           /* empty */
         }
       });

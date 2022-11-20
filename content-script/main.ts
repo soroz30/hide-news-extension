@@ -116,6 +116,10 @@ const observeNodesMutations = (words: string[]) => {
 };
 
 const filterSameStartWords = (words: string[]) => {
+  if (!words) {
+    return [];
+  }
+
   let redundantWords: string[] = [];
 
   words.forEach((word) => {
