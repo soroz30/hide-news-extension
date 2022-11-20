@@ -62,7 +62,7 @@ const observerConfig = {
   characterData: true,
 };
 
-const checkNewNode = (node: HTMLElement, words: string[]) => {
+const handleNewNode = (node: HTMLElement, words: string[]) => {
   const nodeName = node.nodeName.toLowerCase();
   const nodeTypeToCheck = nodesTypes.includes(nodeName);
 
@@ -106,7 +106,7 @@ const observeNodesMutations = (words: string[]) => {
 
         for (let k = 0; k < childNodes.length; k++) {
           const childNode = childNodes[k] as HTMLElement;
-          checkNewNode(childNode, words);
+          handleNewNode(childNode, words);
         }
       }
     }
