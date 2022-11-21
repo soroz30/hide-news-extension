@@ -9,7 +9,7 @@ import "./links.css";
 const storage = chrome.storage.sync;
 const hideLinkClassName = "fearlessHideLink";
 
-const nodesTypes = ["span", "div", "li", "th", "td", "dt", "dd", "a"];
+const nodesToCheck = ["span", "div", "li", "th", "td", "dt", "dd", "a"];
 
 const clearHiddenLinks = () => {
   const hiddenLinks = document.querySelectorAll(`.${hideLinkClassName}`);
@@ -70,7 +70,7 @@ const observerConfig = {
 
 const handleNewNode = (node: HTMLElement, words: string[]) => {
   const nodeName = node.nodeName.toLowerCase();
-  const nodeTypeToCheck = nodesTypes.includes(nodeName);
+  const nodeTypeToCheck = nodesToCheck.includes(nodeName);
 
   if (!nodeTypeToCheck) {
     return;
