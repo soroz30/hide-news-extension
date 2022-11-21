@@ -5,8 +5,9 @@ export const DISABLE = "disable";
 export const ACTIVE = "active";
 export const WORDS = "words";
 import "./links.css";
+import { extensionApi } from "../src/common";
 
-const storage = chrome.storage.sync;
+const storage = extensionApi.storage.sync;
 const hideLinkClassName = "fearlessHideLink";
 
 const nodesToCheck = ["span", "div", "li", "th", "td", "dt", "dd", "a"];
@@ -157,7 +158,7 @@ setTimeout(() => {
   refreshHiddenLinks();
 }, 500);
 
-chrome.runtime.onMessage.addListener(function () {
+extensionApi.runtime.onMessage.addListener(function () {
   refreshHiddenLinks();
   return true;
 });

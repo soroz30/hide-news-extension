@@ -8,14 +8,15 @@ import Header from "./components/Header";
 import WordsList from "./components/WordsList";
 import AddWord from "./components/AddWord";
 import "./App.css";
-const storage = chrome.storage.sync;
+import { extensionApi } from "./common";
+const storage = extensionApi.storage.sync;
 
 const notifyActiveTabs = () => {
-  chrome.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
+  extensionApi.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
     const id = tabs[0].id;
     if (id) {
-      chrome.tabs.sendMessage(id, "refresh", () => {
-        if (!chrome.runtime.lastError) {
+      extensionApi.tabs.sendMessage(id, "refresh", () => {
+        if (!extensionApi.runtime.lastError) {
           /* empty */
         }
       });
