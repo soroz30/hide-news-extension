@@ -5,19 +5,25 @@ export const DISABLE = "disable";
 export const ACTIVE = "active";
 export const WORDS = "words";
 import "./links.css";
+
 const storage = chrome.storage.sync;
+const hideLinkClassName = "fearlessHideLink";
 
 const nodesTypes = ["span", "div", "li", "th", "td", "dt", "dd", "a"];
 
 const clearHiddenLinks = () => {
-  const hiddenLinks = document.querySelectorAll(".fearlessHideLink");
+  const hiddenLinks = document.querySelectorAll(`.${hideLinkClassName}`);
   for (let i = 0; i < hiddenLinks.length; i++) {
-    hiddenLinks[i].className = hiddenLinks[i].className.replace("fearlessHideLink", "");
+    hiddenLinks[i].className = hiddenLinks[i].className.replace(hideLinkClassName, "");
   }
 };
 
 const isWordInText = (text: string, words: string[]) => {
   return words.some((word: string) => text.includes(word));
+};
+
+const addClassName = (node: HTMLElement) => {
+  node.className += node.className ? ` ${hideLinkClassName}` : hideLinkClassName;
 };
 
 const handleNodeLink = (nodeLink: HTMLAnchorElement, words: string[]) => {
@@ -29,9 +35,9 @@ const handleNodeLink = (nodeLink: HTMLAnchorElement, words: string[]) => {
   const wordInText = isWordInText(innerText, words);
 
   if (wordInText) {
-    const fearlessHideLink = nodeLink.className.includes("fearlessHideLink");
+    const fearlessHideLink = nodeLink.className.includes(hideLinkClassName);
     if (!fearlessHideLink) {
-      nodeLink.className += " fearlessHideLink";
+      addClassName(nodeLink);
     }
   } else {
     nodeLink.className = nodeLink.className.replace(/fearlessHideLink/g, "");
@@ -82,15 +88,15 @@ const handleNewNode = (node: HTMLElement, words: string[]) => {
     return;
   }
 
-  const notHiddenLink = nodeName === "a" && !node.className.includes("fearlessHideLink");
+  const notHiddenLink = nodeName === "a" && !node.className.includes(hideLinkClassName);
 
   if (notHiddenLink) {
-    node.className += " fearlessHideLink";
+    addClassName(node);
   } else {
     const closestLink = node.closest("a");
-    const notHiddenParentLink = closestLink && !closestLink.className.includes("fearlessHideLink");
+    const notHiddenParentLink = closestLink && !closestLink.className.includes(hideLinkClassName);
     if (notHiddenParentLink) {
-      closestLink.className += " fearlessHideLink";
+      addClassName(closestLink);
     }
   }
 };
