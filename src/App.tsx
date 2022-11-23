@@ -8,7 +8,9 @@ import Header from "./components/Header";
 import WordsList from "./components/WordsList";
 import AddWord from "./components/AddWord";
 import "./App.css";
-import { extensionApi } from "./common";
+import { extensionApi, getSvgUrl } from "./common";
+import check from "./assets/images/check@3x.svg";
+import plus from "./assets/images/plus@3x.svg";
 const storage = extensionApi.storage.sync;
 
 const notifyActiveTabs = () => {
@@ -53,10 +55,12 @@ const App = () => {
   };
 
   const addWord = () => {
-    const newWord = input.toLowerCase();
+    const newWord = input;
+    const lowerCaseWord = newWord.toLowerCase();
     setInput("");
 
-    if (words.includes(newWord) || !newWord) {
+    const lowerKeyWords = words.map((word) => word.toLowerCase());
+    if (lowerKeyWords.includes(lowerCaseWord) || !newWord) {
       return;
     }
 
@@ -68,7 +72,8 @@ const App = () => {
   };
 
   const removeWord = (word: string) => {
-    const updatedWords = words.filter((w) => w !== word);
+    const lowerCaseWord = word.toLowerCase();
+    const updatedWords = words.filter((w) => w.toLowerCase() !== lowerCaseWord);
     setWords(updatedWords);
     storage.set({ words: updatedWords });
 
@@ -79,6 +84,12 @@ const App = () => {
     setInput(e.target.value);
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      addWord();
+    }
+  };
+
   const handleButtonClick = () => {
     active ? disableHiding() : activateHiding();
   };
@@ -87,8 +98,13 @@ const App = () => {
     <div className="App">
       <Header>
         <div className="hidingButton" onClick={handleButtonClick}>
-          <input type="checkbox" checked={active} />
-          <label className="hidingButtonLabel">Hiding Active</label>
+          <input className="checkbox-input" id="hiding" type="checkbox" checked={active} />
+          <label className="checkbox" htmlFor="hiding">
+            <span>
+              <img src={`${getSvgUrl(check)}`} alt="active" />
+            </span>
+            <span className="hidingButtonLabel">Hiding Active</span>
+          </label>
         </div>
       </Header>
       <WordsList>
@@ -97,16 +113,23 @@ const App = () => {
             <li className="wordItem" key={word}>
               {word}{" "}
               <span className="wordRemove" onClick={() => removeWord(word)} style={{ cursor: "pointer" }}>
-                X
+                <a href="#" className="close"></a>
               </span>
             </li>
           );
         })}
       </WordsList>
       <AddWord>
-        <input className="addWordInput" value={input} onChange={handleInputChange} placeholder={"Add a new word"} />
+        <input
+          className="addWordInput"
+          value={input}
+          onChange={handleInputChange}
+          placeholder={"Add a new word"}
+          onKeyDown={handleKeyPress}
+        />
         <button className="buttonAdd" onClick={addWord}>
-          Add
+          <img src={`${getSvgUrl(plus)}`} alt="plus" />
+          <span className="buttonAddLabel">Add</span>
         </button>
       </AddWord>
     </div>

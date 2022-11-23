@@ -3,6 +3,11 @@ export const WORDS = "words";
 import "./links.css";
 import { extensionApi } from "../src/common";
 
+type StorageItems = {
+  active: boolean | undefined;
+  words: string[] | undefined;
+};
+
 const storage = extensionApi.storage.sync;
 const hideLinkClassName = "fearlessHideLink";
 
@@ -43,11 +48,16 @@ const handleNodeLink = (nodeLink: HTMLAnchorElement, words: string[]) => {
 
 const refreshHiddenLinks = () => {
   storage.get([WORDS, ACTIVE], (items) => {
-    const { words, active } = items;
+    const { words, active } = items as StorageItems;
+
+    if (!words) {
+      return;
+    }
 
     const nodes = document.querySelectorAll("a");
     if (active) {
-      const filteredWords = filterSameStartWords(words);
+      const lowerCaseWords = words.map((word) => word.toLowerCase());
+      const filteredWords = filterSameStartWords(lowerCaseWords);
 
       for (let i = 0; i < nodes.length; i++) {
         const nodeLink = nodes[i];
@@ -142,8 +152,12 @@ const filterSameStartWords = (words: string[]) => {
 
 const handlePageStart = () => {
   storage.get([WORDS, ACTIVE], (items) => {
-    const { words, active } = items;
-    const filteredWords = filterSameStartWords(words);
+    const { words, active } = items as StorageItems;
+    if (!words) {
+      return;
+    }
+    const lowerCaseWords = words.map((word) => word.toLowerCase());
+    const filteredWords = filterSameStartWords(lowerCaseWords);
     if (active) {
       observeNodesMutations(filteredWords);
     }

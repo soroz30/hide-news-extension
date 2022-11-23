@@ -2,14 +2,12 @@
   box-sizing: border-box;
 }
 
-/* plus-jakarta-sans-500 - latin-ext */
 @font-face {
   font-family: "Plus Jakarta Sans";
   font-style: normal;
   font-weight: 500;
   src: local(""), url("./assets/fonts/plus-jakarta-sans-v3-latin-ext-500.woff2") format("woff2");
 }
-/* plus-jakarta-sans-700 - latin-ext */
 @font-face {
   font-family: "Plus Jakarta Sans";
   font-style: normal;
@@ -24,7 +22,6 @@
 
 .App {
   width: 413px;
-  border: 1px solid #e7e7e7;
 }
 
 .App-logo {
@@ -40,7 +37,7 @@
 
 .App-header {
   background-color: var(--blue);
-  min-height: 92px;
+  min-height: 91px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -49,19 +46,51 @@
 
 .hidingButton {
   border-radius: 5px;
-  display: flex;
   align-items: center;
   max-width: 146px;
   min-width: 146px;
   min-height: 44px;
   border-radius: 5px;
   background-color: rgba(28, 94, 140, 1);
-  justify-content: space-between;
   padding: 0 17px 0 12px;
 }
 
-.App-link {
-  color: #61dafb;
+.hidingButton:hover {
+  background-color: rgba(28, 94, 140, 0.9);
+}
+
+.checkbox-input {
+  position: absolute;
+  visibility: hidden;
+}
+
+.checkbox {
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+}
+
+.checkbox span:first-child {
+  background-color: var(--white);
+  position: relative;
+  min-width: 22px;
+  min-height: 22px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkbox-input + .checkbox span:first-child img {
+  display: none;
+}
+
+.checkbox-input:checked + .checkbox span:first-child img {
+  display: inline;
 }
 
 .fearlessLogoContainer {
@@ -83,7 +112,7 @@
   font-style: normal;
   letter-spacing: 0.14px;
   text-align: left;
-  line-height: 19px;
+  line-height: 24px;
   margin: 0 0 0 8px;
 }
 
@@ -94,11 +123,14 @@
   font-weight: 700;
   font-style: normal;
   letter-spacing: -0.44px;
+  line-height: 44px;
+  position: relative;
+  bottom: 1px;
 }
 .hiddenWords {
   background-color: rgba(222, 232, 242, 0.3);
-  min-height: 153px;
-  max-height: 153px;
+  min-height: 152px;
+  max-height: 152px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -107,7 +139,6 @@
 }
 
 .mutedWords {
-  font-size: 12px;
   margin: 0 0 15px;
   color: rgba(94, 104, 115, 1);
   font-family: "Plus Jakarta Sans";
@@ -129,6 +160,7 @@
   color: #019cfe;
   list-style-type: none;
   margin: 0 12px 12px 0;
+  line-height: 36px;
   min-height: 36px;
   max-height: 36px;
   background-color: #e9f4ff;
@@ -138,7 +170,7 @@
   font-weight: 700;
   font-style: normal;
   letter-spacing: -0.44px;
-  padding: 0 13px;
+  padding: 0 0 0 13px;
   display: flex;
   align-items: center;
   border-radius: 5px;
@@ -147,16 +179,40 @@
 }
 
 .wordRemove {
-  margin: 0 0 0 7px;
+  min-height: 44px;
+  margin: 0 0 0 6px;
+  width: 30px;
+}
+
+.close {
+  position: relative;
+}
+
+.close:before,
+.close:after {
+  position: absolute;
+  content: " ";
+  height: 10px;
+  width: 2px;
+  background-color: RGB(51, 55, 59);
+  left: 14px;
+  top: 18px;
+}
+.close:before {
+  transform: rotate(45deg);
+}
+.close:after {
+  transform: rotate(-45deg);
 }
 
 .addWord {
-  border-top: 1px solid RGB(218, 227, 237);
+  border-top: 1px solid rgba(218, 227, 237, 0.3);
   padding: 24px;
-  min-height: 92px;
-  max-height: 92px;
+  min-height: 93px;
+  max-height: 93px;
   align-items: center;
   display: flex;
+  justify-content: space-between;
 }
 
 .addWordInput {
@@ -166,10 +222,10 @@
   width: 100%;
   font-size: 14px;
   font-family: "Plus Jakarta Sans";
-  font-weight: 700;
-  max-width: 233px;
+  font-weight: 500;
+  max-width: 235px;
   border-radius: 4px;
-  border: 2px solid RGB(211, 220, 230, 1);
+  border: 2px solid rgba(211, 220, 230, 1);
   padding: 0 16px;
   line-height: 44px;
 }
@@ -197,7 +253,20 @@
   background-color: rgba(0, 125, 255, 1);
   opacity: 1;
   color: rgba(255, 255, 255, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 6px 0 0;
 }
+
+.buttonAdd:hover {
+  background-color: rgba(0, 125, 255, 0.9);
+}
+
+.buttonAddLabel {
+  margin: 0 0 0 5px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
