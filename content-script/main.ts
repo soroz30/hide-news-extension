@@ -1,7 +1,3 @@
-export const ADD = "add";
-export const REMOVE = "remove";
-export const ENABLE = "enable";
-export const DISABLE = "disable";
 export const ACTIVE = "active";
 export const WORDS = "words";
 import "./links.css";
