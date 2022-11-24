@@ -7,9 +7,9 @@ const WordItem = ({ word, onClick }: WordItemProps) => {
   return (
     <li className="wordItem" key={word}>
       {word}{" "}
-      <span className="wordRemove" onClick={onClick} style={{ cursor: "pointer" }}>
-        <a href="#" className="close"></a>
-      </span>
+      <button className="wordRemove" onClick={onClick}>
+        <span className="close" />
+      </button>
     </li>
   );
 };

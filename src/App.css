@@ -23,6 +23,14 @@ body {
   margin: 0;
 }
 
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
 /* Header */
 
 .App-header {
@@ -58,6 +66,7 @@ body {
 }
 
 .hidingButton {
+  border: 0;
   border-radius: 5px;
   cursor: pointer;
   align-items: center;
@@ -66,29 +75,16 @@ body {
   min-height: 44px;
   border-radius: 5px;
   background-color: rgba(28, 94, 140, 1);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 17px 0 12px;
 }
 
 .hidingButton:hover {
   background-color: rgba(28, 94, 140, 0.9);
 }
 
-.checkbox-input {
-  position: absolute;
-  visibility: hidden;
-}
-
-.checkbox {
-  user-select: none;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  width: 100%;
-  align-items: center;
-  padding: 0 17px 0 12px;
-}
-
-.checkbox span:first-child {
+.hidingButtonCheckbox {
   background-color: #ffffff;
   position: relative;
   min-width: 22px;
@@ -97,14 +93,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.checkbox-input + .checkbox span:first-child img {
-  display: none;
-}
-
-.checkbox-input:checked + .checkbox span:first-child img {
-  display: inline;
 }
 
 .hidingButtonLabel {
@@ -175,6 +163,11 @@ body {
   min-height: 44px;
   margin: 0 0 0 6px;
   width: 30px;
+  padding: 0;
+  border: 0;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  cursor: pointer;
 }
 
 .close {
@@ -251,7 +244,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 6px 0 0;
 }
 
 .buttonAdd:hover {
@@ -259,5 +251,5 @@ body {
 }
 
 .buttonAddLabel {
-  margin: 0 0 0 5px;
+  margin: 0 6px 0 5px;
 }

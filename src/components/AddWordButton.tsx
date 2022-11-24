@@ -8,7 +8,7 @@ type AddWordButtonProps = {
 const AddWordButton = ({ onClick }: AddWordButtonProps) => {
   return (
     <button className="buttonAdd" onClick={onClick}>
-      <img src={`${getSvgUrl(plus)}`} alt="plus" />
+      <img src={`${getSvgUrl(plus)}`} alt="plus" className="buttonAddPlus" />
       <span className="buttonAddLabel">Add</span>
     </button>
   );
