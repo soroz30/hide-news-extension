@@ -1,5 +1,5 @@
 import "./links.css";
-import { extensionApi, WORDS, ACTIVE } from "../src/common";
+import { extensionApi, WORDS, ACTIVE, REFRESH } from "../src/common";
 
 type StorageItems = {
   active: boolean | undefined;
@@ -163,10 +163,12 @@ const handlePageStart = () => {
 
 setTimeout(() => {
   refreshHiddenLinks();
-}, 500);
+}, 300);
 
-extensionApi.runtime.onMessage.addListener(function () {
-  refreshHiddenLinks();
+extensionApi.runtime.onMessage.addListener((request) => {
+  if (request.message === REFRESH) {
+    refreshHiddenLinks();
+  }
   return true;
 });
 

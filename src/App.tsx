@@ -9,22 +9,9 @@ import AddWordInput from "./components/AddWordInput";
 import AddWordButton from "./components/AddWordButton";
 import HeaderButton from "./components/HeaderButton";
 import WordItem from "./components/WordItem";
+import { extensionApi, refreshActiveTab, WORDS, ACTIVE } from "./common";
 import "./App.css";
-import { extensionApi, WORDS, ACTIVE } from "./common";
 const storage = extensionApi.storage.sync;
-
-const notifyActiveTabs = () => {
-  extensionApi.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
-    const id = tabs[0].id;
-    if (id) {
-      extensionApi.tabs.sendMessage(id, "refresh", () => {
-        if (!extensionApi.runtime.lastError) {
-          /* empty */
-        }
-      });
-    }
-  });
-};
 
 const App = () => {
   const [words, setWords] = useState<string[]>([]);
@@ -45,13 +32,13 @@ const App = () => {
   const activateHiding = () => {
     storage.set({ active: true });
     setActive(true);
-    notifyActiveTabs();
+    refreshActiveTab();
   };
 
   const disableHiding = () => {
     storage.set({ active: false });
     setActive(false);
-    notifyActiveTabs();
+    refreshActiveTab();
   };
 
   const addWord = () => {
@@ -68,7 +55,7 @@ const App = () => {
     setWords(updatedWords);
     storage.set({ words: updatedWords });
 
-    notifyActiveTabs();
+    refreshActiveTab();
   };
 
   const removeWord = (word: string) => {
@@ -77,7 +64,7 @@ const App = () => {
     setWords(updatedWords);
     storage.set({ words: updatedWords });
 
-    notifyActiveTabs();
+    refreshActiveTab();
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

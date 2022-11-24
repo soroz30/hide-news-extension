@@ -15,28 +15,14 @@
   src: local(""), url("./assets/fonts/plus-jakarta-sans-v3-latin-ext-700.woff2") format("woff2");
 }
 
-:root {
-  --blue: #007dff;
-  --white: #ffffff;
-}
-
 .App {
   width: 413px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+/* Header */
 
 .App-header {
-  background-color: var(--blue);
+  background-color: #007dff;
   min-height: 91px;
   display: flex;
   align-items: center;
@@ -44,8 +30,32 @@
   padding: 0 24px;
 }
 
+.fearlessLogoContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.fearlessLogo {
+  height: 24px;
+  width: 24px;
+}
+
+.fearlessLogoHeader {
+  opacity: 1;
+  color: #ffffff;
+  font-family: "Plus Jakarta Sans";
+  font-size: 12px;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.14px;
+  text-align: left;
+  line-height: 24px;
+  margin: 0 0 0 8px;
+}
+
 .hidingButton {
   border-radius: 5px;
+  cursor: pointer;
   align-items: center;
   max-width: 146px;
   min-width: 146px;
@@ -75,7 +85,7 @@
 }
 
 .checkbox span:first-child {
-  background-color: var(--white);
+  background-color: #ffffff;
   position: relative;
   min-width: 22px;
   min-height: 22px;
@@ -93,31 +103,8 @@
   display: inline;
 }
 
-.fearlessLogoContainer {
-  display: flex;
-  flex-direction: row;
-}
-
-.fearlessLogo {
-  height: 24px;
-  width: 24px;
-}
-
-.fearlessLogoHeader {
-  opacity: 1;
-  color: var(--white);
-  font-family: "Plus Jakarta Sans";
-  font-size: 12px;
-  font-weight: 700;
-  font-style: normal;
-  letter-spacing: 0.14px;
-  text-align: left;
-  line-height: 24px;
-  margin: 0 0 0 8px;
-}
-
 .hidingButtonLabel {
-  color: var(--white);
+  color: #ffffff;
   font-family: "Plus Jakarta Sans";
   font-size: 14px;
   font-weight: 700;
@@ -127,6 +114,8 @@
   position: relative;
   bottom: 1px;
 }
+
+/* Words list */
 .hiddenWords {
   background-color: rgba(222, 232, 242, 0.3);
   min-height: 152px;
@@ -140,7 +129,7 @@
 
 .mutedWords {
   margin: 0 0 15px;
-  color: rgba(94, 104, 115, 1);
+  color: #5e6873;
   font-family: "Plus Jakarta Sans";
   font-size: 14px;
   font-weight: 500;
@@ -165,7 +154,7 @@
   max-height: 36px;
   background-color: #e9f4ff;
   font-family: "Plus Jakarta Sans";
-  color: rgba(0, 125, 255, 1);
+  color: #007dff;
   font-size: 14px;
   font-weight: 700;
   font-style: normal;
@@ -175,7 +164,7 @@
   align-items: center;
   border-radius: 5px;
   box-shadow: 0px 2px 2px rgba(51, 53, 69, 0.046383);
-  background-color: rgba(255, 255, 255, 1);
+  background-color: #ffffff;
 }
 
 .wordRemove {
@@ -194,7 +183,7 @@
   content: " ";
   height: 10px;
   width: 2px;
-  background-color: RGB(51, 55, 59);
+  background-color: #33373b;
   left: 14px;
   top: 18px;
 }
@@ -204,6 +193,8 @@
 .close:after {
   transform: rotate(-45deg);
 }
+
+/* Add Word */
 
 .addWord {
   border-top: 1px solid rgba(218, 227, 237, 0.3);
@@ -225,13 +216,13 @@
   font-weight: 500;
   max-width: 235px;
   border-radius: 4px;
-  border: 2px solid rgba(211, 220, 230, 1);
+  border: 2px solid #d3dce6;
   padding: 0 16px;
   line-height: 44px;
 }
 
 .addWordInput::placeholder {
-  color: rgba(44, 44, 44, 1);
+  color: #2c2c2c;
   letter-spacing: -0.45px;
   font-size: 14px;
   font-family: "Plus Jakarta Sans";
@@ -252,7 +243,7 @@
   letter-spacing: -0.45px;
   background-color: rgba(0, 125, 255, 1);
   opacity: 1;
-  color: rgba(255, 255, 255, 1);
+  color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -265,13 +256,4 @@
 
 .buttonAddLabel {
   margin: 0 0 0 5px;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
