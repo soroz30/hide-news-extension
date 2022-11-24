@@ -3,7 +3,7 @@ export const WORDS = "words";
 export const REFRESH = "refresh";
 export const extensionApi = chrome || browser;
 
-export const getSvgUrl = (svg: any) => {
+export const getSvgUrl = (svg: typeof import("*.svg")) => {
   if (window.chrome) {
     return window.chrome.runtime.getURL(svg.toString());
   }
