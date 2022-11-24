@@ -35,7 +35,7 @@ body {
 
 .App-header {
   background-color: #007dff;
-  min-height: 91px;
+  min-height: 92px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -45,6 +45,7 @@ body {
 .fearlessLogoContainer {
   display: flex;
   flex-direction: row;
+  margin: 2px 0 0;
 }
 
 .fearlessLogo {
@@ -95,6 +96,10 @@ body {
   align-items: center;
 }
 
+.hidingButtonImg {
+  margin: 0 1px 0 0;
+}
+
 .hidingButtonLabel {
   color: #ffffff;
   font-family: "Plus Jakarta Sans";
@@ -104,7 +109,6 @@ body {
   letter-spacing: -0.44px;
   line-height: 44px;
   position: relative;
-  bottom: 1px;
 }
 
 /* Words list */
@@ -115,12 +119,12 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 14px 24px;
+  padding: 15px 24px 14px;
   overflow: scroll;
 }
 
 .mutedWords {
-  margin: 0 0 15px;
+  margin: 0 0 14px;
   color: #5e6873;
   font-family: "Plus Jakarta Sans";
   font-size: 14px;
@@ -195,7 +199,7 @@ body {
 
 .addWord {
   border-top: 1px solid rgba(218, 227, 237, 0.3);
-  padding: 24px;
+  padding: 23px 24px 23px 23px;
   min-height: 93px;
   max-height: 93px;
   align-items: center;
@@ -205,8 +209,8 @@ body {
 
 .addWordInput {
   margin-right: 7px;
-  min-height: 44px;
-  max-height: 44px;
+  min-height: 46px;
+  max-height: 46px;
   width: 100%;
   font-size: 14px;
   font-family: "Plus Jakarta Sans";
@@ -214,7 +218,7 @@ body {
   max-width: 235px;
   border-radius: 4px;
   border: 2px solid #d3dce6;
-  padding: 0 16px;
+  padding: 0 15px 1px;
   line-height: 44px;
 }
 
@@ -250,6 +254,11 @@ body {
   background-color: rgba(0, 125, 255, 0.9);
 }
 
+.buttonAddPlus {
+  position: relative;
+  top: 0.5px;
+}
+
 .buttonAddLabel {
-  margin: 0 6px 0 5px;
+  margin: 0 7px 0 4px;
 }

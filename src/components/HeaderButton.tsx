@@ -10,7 +10,7 @@ const HeaderButton = ({ onClick, checked }: HeaderButtonProps) => {
   return (
     <button className="hidingButton" onClick={onClick}>
       <span className="hidingButtonCheckbox">
-        <img src={`${getSvgUrl(check)}`} alt="active" className={checked ? "visible" : "hidden"} />
+        <img src={`${getSvgUrl(check)}`} alt="active" className={checked ? "visible hidingButtonImg" : "hidden"} />
       </span>
       <span className="hidingButtonLabel">Hiding Active</span>
     </button>
