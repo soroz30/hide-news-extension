@@ -4,13 +4,13 @@ import { getSvgUrl } from "../common";
 
 const Header = ({ button }: { button: React.ReactNode }) => {
   return (
-    <header className="App-header">
+    <div className="App-header">
       <div className="fearlessLogoContainer">
         <img className="fearlessLogo" src={`${getSvgUrl(logo)}`} alt="Fear Less Logo" />
         <p className="fearlessLogoHeader">GoodNewsOnly</p>
       </div>
       {button}
-    </header>
+    </div>
   );
 };
 
