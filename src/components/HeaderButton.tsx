@@ -8,8 +8,8 @@ type HeaderButtonProps = {
 
 const HeaderButton = ({ onClick, checked }: HeaderButtonProps) => {
   return (
-    <div className="hidingButton" onClick={onClick}>
-      <input className="checkbox-input" id="hiding" type="checkbox" checked={checked} />
+    <div className="hidingButton">
+      <input className="checkbox-input" id="hiding" type="checkbox" checked={checked} onClick={onClick} />
       <label className="checkbox" htmlFor="hiding">
         <span>
           <img src={`${getSvgUrl(check)}`} alt="active" />
