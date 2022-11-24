@@ -5,10 +5,12 @@ import { useEffect, useState } from "preact/hooks";
 import Header from "./components/Header";
 import WordsList from "./components/WordsList";
 import AddWord from "./components/AddWord";
+import AddWordInput from "./components/AddWordInput";
+import AddWordButton from "./components/AddWordButton";
+import HeaderButton from "./components/HeaderButton";
+import WordItem from "./components/WordItem";
 import "./App.css";
-import { extensionApi, getSvgUrl, WORDS, ACTIVE } from "./common";
-import check from "./assets/images/check@3x.svg";
-import plus from "./assets/images/plus@3x.svg";
+import { extensionApi, WORDS, ACTIVE } from "./common";
 const storage = extensionApi.storage.sync;
 
 const notifyActiveTabs = () => {
@@ -94,41 +96,20 @@ const App = () => {
 
   return (
     <div className="App">
-      <Header>
-        <div className="hidingButton" onClick={handleButtonClick}>
-          <input className="checkbox-input" id="hiding" type="checkbox" checked={active} />
-          <label className="checkbox" htmlFor="hiding">
-            <span>
-              <img src={`${getSvgUrl(check)}`} alt="active" />
-            </span>
-            <span className="hidingButtonLabel">Hiding Active</span>
-          </label>
-        </div>
-      </Header>
+      <Header button={<HeaderButton onClick={handleButtonClick} checked={active} />} />
       <WordsList>
         {words.map((word) => {
-          return (
-            <li className="wordItem" key={word}>
-              {word}{" "}
-              <span className="wordRemove" onClick={() => removeWord(word)} style={{ cursor: "pointer" }}>
-                <a href="#" className="close"></a>
-              </span>
-            </li>
-          );
+          return <WordItem key={word} word={word} onClick={() => removeWord(word)} />;
         })}
       </WordsList>
       <AddWord>
-        <input
-          className="addWordInput"
+        <AddWordInput
           value={input}
           onChange={handleInputChange}
           placeholder={"Add a new word"}
           onKeyDown={handleKeyPress}
         />
-        <button className="buttonAdd" onClick={addWord}>
-          <img src={`${getSvgUrl(plus)}`} alt="plus" />
-          <span className="buttonAddLabel">Add</span>
-        </button>
+        <AddWordButton onClick={addWord} />
       </AddWord>
     </div>
   );
