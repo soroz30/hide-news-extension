@@ -1,7 +1,5 @@
-export const ACTIVE = "active";
-export const WORDS = "words";
 import "./links.css";
-import { extensionApi } from "../src/common";
+import { extensionApi, WORDS, ACTIVE } from "../src/common";
 
 type StorageItems = {
   active: boolean | undefined;
@@ -51,7 +49,7 @@ const refreshHiddenLinks = () => {
     const { words, active } = items as StorageItems;
 
     if (!words) {
-      return;
+      return clearHiddenLinks();
     }
 
     const nodes = document.querySelectorAll("a");
@@ -136,7 +134,8 @@ const filterSameStartWords = (words: string[]) => {
   let redundantWords: string[] = [];
 
   words.forEach((word) => {
-    const filteredWords = words.filter((w) => w.startsWith(word) && w.length > word.length);
+    const lowerCaseWord = word.toLowerCase();
+    const filteredWords = words.filter((w) => w.toLowerCase().startsWith(lowerCaseWord) && w.length > word.length);
     if (filteredWords.length) {
       redundantWords = [...redundantWords, ...filteredWords];
     }
@@ -153,14 +152,12 @@ const filterSameStartWords = (words: string[]) => {
 const handlePageStart = () => {
   storage.get([WORDS, ACTIVE], (items) => {
     const { words, active } = items as StorageItems;
-    if (!words) {
+    if (!words || !active) {
       return;
     }
     const lowerCaseWords = words.map((word) => word.toLowerCase());
     const filteredWords = filterSameStartWords(lowerCaseWords);
-    if (active) {
-      observeNodesMutations(filteredWords);
-    }
+    observeNodesMutations(filteredWords);
   });
 };
 

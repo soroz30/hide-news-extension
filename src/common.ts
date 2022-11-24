@@ -1,3 +1,5 @@
+export const ACTIVE = "active";
+export const WORDS = "words";
 export const extensionApi = chrome || browser;
 
 export const getSvgUrl = (svg: any) => {

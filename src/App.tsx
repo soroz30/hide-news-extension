@@ -1,14 +1,12 @@
 /// <reference types="chrome" />
 /// <reference types="vite-plugin-svgr/client" />
 
-import { WORDS, ACTIVE } from "../content-script/main";
-
 import { useEffect, useState } from "preact/hooks";
 import Header from "./components/Header";
 import WordsList from "./components/WordsList";
 import AddWord from "./components/AddWord";
 import "./App.css";
-import { extensionApi, getSvgUrl } from "./common";
+import { extensionApi, getSvgUrl, WORDS, ACTIVE } from "./common";
 import check from "./assets/images/check@3x.svg";
 import plus from "./assets/images/plus@3x.svg";
 const storage = extensionApi.storage.sync;
