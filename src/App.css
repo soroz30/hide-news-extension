@@ -79,6 +79,7 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 0 17px 0 12px;
+  transition: background-color 0.3s;
 }
 
 .hidingButton:hover {
@@ -233,6 +234,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.3s;
 }
 
 .buttonAdd:hover {
