@@ -172,27 +172,12 @@ body {
   background-color: rgba(0, 0, 0, 0);
   display: flex;
   cursor: pointer;
+  justify-content: center;
+  align-items: center;
 }
 
-.close {
-  position: relative;
-}
-
-.close:before,
-.close:after {
-  position: absolute;
-  content: " ";
-  height: 10px;
-  width: 2px;
-  background-color: #33373b;
-  left: 14px;
-  top: 18px;
-}
-.close:before {
-  transform: rotate(45deg);
-}
-.close:after {
-  transform: rotate(-45deg);
+.wordRemoveCross {
+  margin: 2px 0 0 1px;
 }
 
 /* Add Word */
@@ -260,5 +245,5 @@ body {
 }
 
 .buttonAddLabel {
-  margin: 0 8px 0 5px;
+  margin: 0 7px 0 4px;
 }
