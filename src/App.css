@@ -72,7 +72,7 @@ body {
   cursor: pointer;
   align-items: center;
   max-width: 146px;
-  min-width: 146px;
+  width: 100%;
   min-height: 44px;
   border-radius: 5px;
   background-color: rgba(28, 94, 140, 1);
@@ -122,7 +122,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   padding: 15px 24px 14px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .mutedWords {
@@ -194,9 +194,8 @@ body {
 }
 
 .addWordInput {
-  margin-right: 7px;
+  margin: 0 7px 0 0;
   min-height: 46px;
-  max-height: 46px;
   width: 100%;
   font-size: 14px;
   font-family: "Plus Jakarta Sans";
@@ -204,8 +203,7 @@ body {
   max-width: 235px;
   border-radius: 4px;
   border: 2px solid #d3dce6;
-  padding: 0 15px 1px;
-  line-height: 44px;
+  padding: 0 15px 2px;
 }
 
 .addWordInput::placeholder {
@@ -222,7 +220,6 @@ body {
   max-width: 120px;
   border: 0;
   min-height: 44px;
-  max-height: 44px;
   border-radius: 4px;
   font-size: 14px;
   font-family: "Plus Jakarta Sans";
