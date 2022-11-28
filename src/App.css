@@ -144,6 +144,7 @@ body {
 }
 
 .wordItem {
+  user-select: none;
   list-style-type: none;
   margin: 0 12px 12px 0;
   line-height: 36px;
