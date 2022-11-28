@@ -141,12 +141,12 @@ body {
   padding: 0;
   flex-wrap: wrap;
   margin: 0;
+  gap: 8px;
 }
 
 .wordItem {
   user-select: none;
   list-style-type: none;
-  margin: 0 12px 12px 0;
   line-height: 36px;
   min-height: 36px;
   max-height: 36px;
@@ -167,7 +167,7 @@ body {
 
 .wordRemove {
   min-height: 44px;
-  margin: 0 0 0 6px;
+  margin: 0 0 0 2px;
   width: 30px;
   padding: 0;
   border: 0;
