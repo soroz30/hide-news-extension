@@ -7,37 +7,38 @@ type StorageItems = {
 };
 
 const storage = extensionApi.storage.sync;
-const hideLinkClassName = "fearlessHideLink";
+const dataAttributeName = "data-goodnewsonly";
 
 const nodesToCheck = ["span", "div", "li", "th", "td", "dt", "dd", "a"];
 
 const clearHiddenLinks = () => {
-  const hiddenLinks = document.querySelectorAll(`.${hideLinkClassName}`);
+  const hiddenLinks = document.querySelectorAll(`a[${dataAttributeName}`);
   for (let i = 0; i < hiddenLinks.length; i++) {
-    hiddenLinks[i].className = hiddenLinks[i].className.replace(hideLinkClassName, "");
+    hiddenLinks[i].removeAttribute(dataAttributeName);
   }
 };
 
-const addClassName = (node: HTMLElement) => {
-  node.className += node.className ? ` ${hideLinkClassName}` : hideLinkClassName;
+const addAttribute = (node: HTMLElement) => {
+  node.setAttribute(dataAttributeName, "true");
+};
+
+const removeAttribute = (node: HTMLElement) => {
+  node.removeAttribute(dataAttributeName);
 };
 
 const handleNodeLink = (nodeLink: HTMLAnchorElement, wordsRegex: RegExp) => {
   const innerText = nodeLink.innerText?.normalize().toLowerCase();
 
   if (!innerText) {
-    return (nodeLink.className = nodeLink.className.replace(/fearlessHideLink/g, ""));
+    return removeAttribute(nodeLink);
   }
 
   const wordInText = wordsRegex.test(innerText);
 
   if (wordInText) {
-    const fearlessHideLink = nodeLink.className.includes(hideLinkClassName);
-    if (!fearlessHideLink) {
-      addClassName(nodeLink);
-    }
+    addAttribute(nodeLink);
   } else {
-    nodeLink.className = nodeLink.className.replace(/fearlessHideLink/g, "");
+    removeAttribute(nodeLink);
   }
 };
 
@@ -91,15 +92,12 @@ const handleNewNode = (node: HTMLElement, wordsRegex: RegExp) => {
     return;
   }
 
-  const notHiddenLink = nodeName === "a" && !node.className.includes(hideLinkClassName);
-
-  if (notHiddenLink) {
-    addClassName(node);
+  if (nodeName === "a") {
+    addAttribute(node);
   } else {
     const closestLink = node.closest("a");
-    const notHiddenParentLink = closestLink && !closestLink.className.includes(hideLinkClassName);
-    if (notHiddenParentLink) {
-      addClassName(closestLink);
+    if (closestLink) {
+      addAttribute(closestLink);
     }
   }
 };
