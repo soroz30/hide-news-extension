@@ -18,21 +18,21 @@ const clearHiddenLinks = () => {
   }
 };
 
-const isWordInText = (text: string, wordsRegex: RegExp) => {
-  return wordsRegex.test(text);
+const isWordInText = (text: string, words: string[]) => {
+  return words.some((word: string) => text.includes(word));
 };
 
 const addClassName = (node: HTMLElement) => {
   node.className += node.className ? ` ${hideLinkClassName}` : hideLinkClassName;
 };
 
-const handleNodeLink = (nodeLink: HTMLAnchorElement, wordsRegex: RegExp) => {
+const handleNodeLink = (nodeLink: HTMLAnchorElement, words: string[]) => {
   const innerText = nodeLink.innerText?.toLowerCase();
 
   if (!innerText) {
     return (nodeLink.className = nodeLink.className.replace(/fearlessHideLink/g, ""));
   }
-  const wordInText = isWordInText(innerText, wordsRegex);
+  const wordInText = isWordInText(innerText, words);
 
   if (wordInText) {
     const fearlessHideLink = nodeLink.className.includes(hideLinkClassName);
@@ -56,11 +56,10 @@ const refreshHiddenLinks = () => {
     if (active) {
       const lowerCaseWords = words.map((word) => word.toLowerCase());
       const filteredWords = filterSameStartWords(lowerCaseWords);
-      const wordsRegex = new RegExp(filteredWords.join("|"), "gi");
 
       for (let i = 0; i < nodes.length; i++) {
         const nodeLink = nodes[i];
-        handleNodeLink(nodeLink, wordsRegex);
+        handleNodeLink(nodeLink, filteredWords);
       }
     } else {
       clearHiddenLinks();
@@ -74,7 +73,7 @@ const observerConfig = {
   characterData: true,
 };
 
-const handleNewNode = (node: HTMLElement, wordsRegex: RegExp) => {
+const handleNewNode = (node: HTMLElement, words: string[]) => {
   const nodeName = node.nodeName.toLowerCase();
   const nodeTypeToCheck = nodesToCheck.includes(nodeName);
 
@@ -88,7 +87,7 @@ const handleNewNode = (node: HTMLElement, wordsRegex: RegExp) => {
     return;
   }
 
-  const bannedWordInText = isWordInText(innerText, wordsRegex);
+  const bannedWordInText = isWordInText(innerText, words);
 
   if (!bannedWordInText) {
     return;
@@ -107,7 +106,7 @@ const handleNewNode = (node: HTMLElement, wordsRegex: RegExp) => {
   }
 };
 
-const observeNodesMutations = (wordsRegex: RegExp) => {
+const observeNodesMutations = (words: string[]) => {
   const observer = new MutationObserver(function (mutations) {
     for (let i = 0; i < mutations.length; i++) {
       const addedNodes = mutations[i].addedNodes;
@@ -118,7 +117,7 @@ const observeNodesMutations = (wordsRegex: RegExp) => {
 
         for (let k = 0; k < childNodes.length; k++) {
           const childNode = childNodes[k] as HTMLElement;
-          handleNewNode(childNode, wordsRegex);
+          handleNewNode(childNode, words);
         }
       }
     }
@@ -158,8 +157,7 @@ const handlePageStart = () => {
     }
     const lowerCaseWords = words.map((word) => word.toLowerCase());
     const filteredWords = filterSameStartWords(lowerCaseWords);
-    const wordsRegex = new RegExp(filteredWords.join("|"), "gi");
-    observeNodesMutations(wordsRegex);
+    observeNodesMutations(filteredWords);
   });
 };
 
