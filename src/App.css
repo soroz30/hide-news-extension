@@ -117,7 +117,7 @@ body {
 .hiddenWords {
   background-color: rgba(222, 232, 242, 0.3);
   min-height: 152px;
-  max-height: 152px;
+  max-height: 330px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
