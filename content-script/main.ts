@@ -18,21 +18,18 @@ const clearHiddenLinks = () => {
   }
 };
 
-const isWordInText = (text: string, words: string[]) => {
-  return words.some((word: string) => text.includes(word));
-};
-
 const addClassName = (node: HTMLElement) => {
   node.className += node.className ? ` ${hideLinkClassName}` : hideLinkClassName;
 };
 
-const handleNodeLink = (nodeLink: HTMLAnchorElement, words: string[]) => {
-  const innerText = nodeLink.innerText?.toLowerCase();
+const handleNodeLink = (nodeLink: HTMLAnchorElement, wordsRegex: RegExp) => {
+  const innerText = nodeLink.innerText?.normalize().toLowerCase();
 
   if (!innerText) {
     return (nodeLink.className = nodeLink.className.replace(/fearlessHideLink/g, ""));
   }
-  const wordInText = isWordInText(innerText, words);
+
+  const wordInText = wordsRegex.test(innerText);
 
   if (wordInText) {
     const fearlessHideLink = nodeLink.className.includes(hideLinkClassName);
@@ -56,10 +53,11 @@ const refreshHiddenLinks = () => {
     if (active) {
       const lowerCaseWords = words.map((word) => word.toLowerCase());
       const filteredWords = filterSameStartWords(lowerCaseWords);
+      const wordsRegex = new RegExp(filteredWords.join("|"), "i");
 
       for (let i = 0; i < nodes.length; i++) {
         const nodeLink = nodes[i];
-        handleNodeLink(nodeLink, filteredWords);
+        handleNodeLink(nodeLink, wordsRegex);
       }
     } else {
       clearHiddenLinks();
@@ -73,7 +71,7 @@ const observerConfig = {
   characterData: true,
 };
 
-const handleNewNode = (node: HTMLElement, words: string[]) => {
+const handleNewNode = (node: HTMLElement, wordsRegex: RegExp) => {
   const nodeName = node.nodeName.toLowerCase();
   const nodeTypeToCheck = nodesToCheck.includes(nodeName);
 
@@ -81,13 +79,13 @@ const handleNewNode = (node: HTMLElement, words: string[]) => {
     return;
   }
 
-  const innerText = node.innerText?.toLowerCase();
+  const innerText = node.innerText?.normalize().toLowerCase();
 
   if (!innerText) {
     return;
   }
 
-  const bannedWordInText = isWordInText(innerText, words);
+  const bannedWordInText = wordsRegex.test(innerText);
 
   if (!bannedWordInText) {
     return;
@@ -106,7 +104,7 @@ const handleNewNode = (node: HTMLElement, words: string[]) => {
   }
 };
 
-const observeNodesMutations = (words: string[]) => {
+const observeNodesMutations = (wordsRegex: RegExp) => {
   const observer = new MutationObserver(function (mutations) {
     for (let i = 0; i < mutations.length; i++) {
       const addedNodes = mutations[i].addedNodes;
@@ -117,7 +115,7 @@ const observeNodesMutations = (words: string[]) => {
 
         for (let k = 0; k < childNodes.length; k++) {
           const childNode = childNodes[k] as HTMLElement;
-          handleNewNode(childNode, words);
+          handleNewNode(childNode, wordsRegex);
         }
       }
     }
@@ -157,7 +155,8 @@ const handlePageStart = () => {
     }
     const lowerCaseWords = words.map((word) => word.toLowerCase());
     const filteredWords = filterSameStartWords(lowerCaseWords);
-    observeNodesMutations(filteredWords);
+    const wordsRegex = new RegExp(filteredWords.join("|"), "i");
+    observeNodesMutations(wordsRegex);
   });
 };
 
