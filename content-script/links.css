@@ -1,4 +1,4 @@
-a.fearlessHideLink {
+a[data-goodnewsonly="true"] {
   position: relative;
   left: -10000px;
   pointer-events: none;
