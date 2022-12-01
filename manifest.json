@@ -5,9 +5,14 @@
   "action": {
     "default_title": "GoodNewsOnly",
     "default_popup": "index.html",
-    "default_icon": "logo192.png"
+    "default_icon": "32x32.png"
   },
-  "icons": {},
+  "icons": {
+    "16": "16x16.png",
+    "32": "32x32.png",
+    "48": "48x48.png",
+    "128": "128x128.png"
+  },
   "host_permissions": ["<all_urls>"],
   "permissions": ["storage", "tabs"],
   "content_scripts": [
