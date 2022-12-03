@@ -12,7 +12,7 @@ const dataAttributeName = "data-goodnewsonly";
 const nodesToCheck = ["span", "div", "li", "th", "td", "dt", "dd", "a"];
 
 const clearHiddenLinks = () => {
-  const hiddenLinks = document.querySelectorAll(`a[${dataAttributeName}`);
+  const hiddenLinks = document.querySelectorAll(`a[${dataAttributeName}="true"]`);
   for (let i = 0; i < hiddenLinks.length; i++) {
     hiddenLinks[i].removeAttribute(dataAttributeName);
   }
@@ -46,22 +46,18 @@ const refreshHiddenLinks = () => {
   storage.get([WORDS, ACTIVE], (items) => {
     const { words, active } = items as StorageItems;
 
-    if (!words) {
+    if (!words || words.length === 0 || !active) {
       return clearHiddenLinks();
     }
 
     const nodes = document.querySelectorAll("a");
-    if (active) {
-      const lowerCaseWords = words.map((word) => word.toLowerCase());
-      const filteredWords = filterSameStartWords(lowerCaseWords);
-      const wordsRegex = new RegExp(filteredWords.join("|"), "i");
+    const lowerCaseWords = words.map((word) => word.toLowerCase());
+    const filteredWords = filterSameStartWords(lowerCaseWords);
+    const wordsRegex = new RegExp(filteredWords.join("|"), "i");
 
-      for (let i = 0; i < nodes.length; i++) {
-        const nodeLink = nodes[i];
-        handleNodeLink(nodeLink, wordsRegex);
-      }
-    } else {
-      clearHiddenLinks();
+    for (let i = 0; i < nodes.length; i++) {
+      const nodeLink = nodes[i];
+      handleNodeLink(nodeLink, wordsRegex);
     }
   });
 };
@@ -123,7 +119,7 @@ const observeNodesMutations = (wordsRegex: RegExp) => {
 };
 
 const filterSameStartWords = (words: string[]) => {
-  if (!words) {
+  if (!words || words.length === 0) {
     return [];
   }
 
@@ -148,7 +144,7 @@ const filterSameStartWords = (words: string[]) => {
 const handlePageStart = () => {
   storage.get([WORDS, ACTIVE], (items) => {
     const { words, active } = items as StorageItems;
-    if (!words || !active) {
+    if (!words || words.length === 0 || !active) {
       return;
     }
     const lowerCaseWords = words.map((word) => word.toLowerCase());
