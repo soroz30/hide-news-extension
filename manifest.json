@@ -13,8 +13,7 @@
     "48": "48x48.png",
     "128": "128x128.png"
   },
-  "host_permissions": ["<all_urls>"],
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage"],
   "content_scripts": [
     {
       "matches": ["https://*/*"],
